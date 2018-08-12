@@ -1,8 +1,6 @@
 # CollectionView with a simple parallax effect
 
-## This is based on a tutorial i found online but struggled to understand it or make it work properly so used my own logic and created this.
-
-### Usage:-
+## Usage:-
 
 1) In the storyboard set the layout to custom and specify this class below it.
 2) There are two IBInspectable properties :-
@@ -12,14 +10,19 @@
 
 Thats it nothing else needed.Handle your cells the way you want , no questions asked , just set this class in the storboard and your good to go.
 
-##### Note:-
+#### Note:-
 
 Based on the standard cell height , the featured cell height will automatically be calculated and fill the space.
 
-##### Note:-
+#### Note:-
 
 This is still under development and may have minor issues , will fix when i get time.
 
-#### Sample :-
+### Sample :-
 
 ![Alt Text](https://github.com/iThink32/CollectionViewParallaxEffect/blob/master/ParallaxEffect1.gif)
+
+#### Note :-
+
+This is based on a tutorial i found online but struggled to understand it or make it work properly so used my own logic and created this.
+
