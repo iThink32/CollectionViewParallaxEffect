@@ -73,7 +73,7 @@ class ParallaxFlowLayout: UICollectionViewLayout {
         guard let unwrappedCollectionView = self.collectionView else{
             return
         }
-        self.populateRequiredProperties(collectionView: unwrappedCollectionView, standardHeight: 100)
+        self.populateDataModel(collectionView: unwrappedCollectionView, standardHeight: 100)
         guard let unwrappedConstantsInstance = self.constants else{
             return
         }
@@ -121,7 +121,7 @@ class ParallaxFlowLayout: UICollectionViewLayout {
     }
     
     
-    func populateRequiredProperties(collectionView:UICollectionView,standardHeight:CGFloat) {
+    func populateDataModel(collectionView:UICollectionView,standardHeight:CGFloat) {
         let totalHeight = collectionView.frame.size.height
         let spaceOccupiedByStandardCells = CGFloat(self.noOfCellsPerScreen - 1) * standardHeight
         let featuredCellHeight = totalHeight - spaceOccupiedByStandardCells
