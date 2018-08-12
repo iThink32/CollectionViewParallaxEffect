@@ -3,8 +3,6 @@
 //  CollectionViewTest
 //
 //  Created by N.A Shashank on 11/08/18.
-// All rights reserved.
-//
 
 import UIKit
 
@@ -14,13 +12,6 @@ class ParallaxFlowLayout: UICollectionViewLayout {
     @IBInspectable var standardHeight:CGFloat = 100
     
     var cache = [UICollectionViewLayoutAttributes]()
-    
-    var featuredItemIndex: Int {
-        guard let unwrappedCollectionView = self.collectionView,let unwrappedConstantsInstance = self.constants else{
-            return 0
-        }
-        return max(0, Int(unwrappedCollectionView.contentOffset.y / unwrappedConstantsInstance.dragOffset))
-    }
     
     struct Constants {
         let standardHeight:CGFloat
@@ -35,6 +26,13 @@ class ParallaxFlowLayout: UICollectionViewLayout {
     }
     
     var constants:Constants?
+    
+    var featuredItemIndex: Int {
+        guard let unwrappedCollectionView = self.collectionView,let unwrappedConstantsInstance = self.constants else{
+            return 0
+        }
+        return max(0, Int(unwrappedCollectionView.contentOffset.y / unwrappedConstantsInstance.dragOffset))
+    }
     
     var nextItemPercentageOffset: CGFloat {
         guard let unwrappedCollectionView = self.collectionView,let unwrappedConstantsInstance = self.constants else{
@@ -55,22 +53,6 @@ class ParallaxFlowLayout: UICollectionViewLayout {
             return 0
         }
         return unwrappedCollectionView.frame.size.height
-    }
-    
-    var numberOfItems: Int {
-        get {
-            return collectionView!.numberOfItems(inSection: 0)
-        }
-    }
-    
-    func populateRequiredProperties(collectionView:UICollectionView,standardHeight:CGFloat) {
-        let totalHeight = collectionView.frame.size.height
-        let spaceOccupiedByStandardCells = CGFloat(self.noOfCellsPerScreen - 1) * standardHeight
-        let featuredCellHeight = totalHeight - spaceOccupiedByStandardCells
-        guard featuredCellHeight > 0 else{
-            return
-        }
-        self.constants = Constants(standardHeight: standardHeight, featuredHeight: featuredCellHeight, dragOffset: CGFloat(featuredCellHeight))
     }
     
     override var collectionViewContentSize: CGSize {
@@ -98,26 +80,25 @@ class ParallaxFlowLayout: UICollectionViewLayout {
         var frame = CGRect.zero
         var y: CGFloat = 0
         
-        for item in 0..<numberOfItems {
+        for item in 0..<unwrappedCollectionView.numberOfItems(inSection: 0)
+        {
             
             let indexPath = IndexPath(item: item, section: 0)
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-            
-            /* Important because each cell has to slide over the top of the previous one */
             attributes.zIndex = item
-            /* Initially set the height of the cell to the standard height */
             var height = unwrappedConstantsInstance.standardHeight
             
-            if indexPath.item == self.featuredItemIndex {
-                /* The featured cell */
+            if indexPath.item == self.featuredItemIndex
+            {
                 height = unwrappedConstantsInstance.featuredHeight
                 let yOffset = unwrappedConstantsInstance.standardHeight * self.nextItemPercentageOffset
                 y = self.collectionView!.contentOffset.y - yOffset
                 height = height - ((unwrappedConstantsInstance.featuredHeight - unwrappedConstantsInstance.standardHeight) * self.nextItemPercentageOffset)
-                print("height of featured item is:\(height)")
-            } else if indexPath.item == (featuredItemIndex + 1) && indexPath.item != numberOfItems {
+                //if indexPath.item == (featuredItemIndex + 1) && indexPath.item != unwrappedCollectionView.numberOfItems(inSection: 0)
+            }
+            else if indexPath.item == (featuredItemIndex + 1)
+            {
                 height = height + ((unwrappedConstantsInstance.featuredHeight - unwrappedConstantsInstance.standardHeight) * self.nextItemPercentageOffset)
-                print("height of to be featured item is \(height)")
             }
             frame = CGRect(x: 0, y: y, width: collectionViewWidth, height: height)
             attributes.frame = frame
@@ -135,14 +116,19 @@ class ParallaxFlowLayout: UICollectionViewLayout {
         return layoutAttributes
     }
     
-    //    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-    //        let itemIndex = round(proposedContentOffset.y / dragOffset)
-    //        let yOffset = itemIndex * dragOffset
-    //        return CGPoint(x: 0, y: yOffset)
-    //    }
-    
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true
+    }
+    
+    
+    func populateRequiredProperties(collectionView:UICollectionView,standardHeight:CGFloat) {
+        let totalHeight = collectionView.frame.size.height
+        let spaceOccupiedByStandardCells = CGFloat(self.noOfCellsPerScreen - 1) * standardHeight
+        let featuredCellHeight = totalHeight - spaceOccupiedByStandardCells
+        guard featuredCellHeight > 0 else{
+            return
+        }
+        self.constants = Constants(standardHeight: standardHeight, featuredHeight: featuredCellHeight, dragOffset: CGFloat(featuredCellHeight))
     }
     
 }
