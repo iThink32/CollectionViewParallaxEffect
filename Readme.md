@@ -20,7 +20,7 @@ This project works with / without a navigation controller on iOS 11+.
 
 ### Sample :-
 
-![Alt Text](https://github.com/iThink32/CollectionViewParallaxEffect/blob/master/ParallaxEffect.gif)
+![Alt Text](https://github.com/iThink32/CollectionViewParallaxEffect/blob/master/PrallaxEffect.gif)
 
 #### Note :-
 
